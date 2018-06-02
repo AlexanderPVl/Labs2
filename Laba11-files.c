@@ -6,7 +6,7 @@ int CorrStrScan(char* Dest)
 	while (Dest[0] == '\n');
 	fgets(Dest, WRD_LN, stdin);
 	len = strlen(Dest);
-	if (len == WRD_LN - 1) while (getchar() != ' ');
+	if (len == WRD_LN - 1) while (getchar() != '\n');
 	if (len > 0 && Dest[len - 1] == '\n') Dest[--len] = 0;
 	if (len > 0 && Dest[len - 1] == '\r') Dest[--len] = 0;
 	return len;
@@ -16,10 +16,30 @@ int CreateTxtFile()
 {
 	FILE *f;
 	int len = 100;
+	char word[WRD_LN];
+	char c = '0', i = 0;
 	f = fopen(TXT_FL_NM, "r");
 	if (f){ printf("File already exists\n"); fclose(f); return 1; }
 	printf("File does not exist\nFill \"%s\" file", TXT_FL_NM);
 	f = fopen(TXT_FL_NM, "w");
+
+	printf("Enter string:\n");
+	while ((c = getchar()) != '.')
+	{
+		if (c == ' '){
+			word[i++] = ' ';
+			word[i] = '\0';
+			fprintf(f, "%s", word);
+			i = 0;
+		}
+		else
+			word[i++] = c;
+		word[i++] = ' ';
+		word[i] = '\0';
+	}
+	word[i] = '\0';
+	fprintf(f, "%s", word);
+
 	fclose(f);
 	return;
 	/*printf("Enter text:\n");
@@ -135,6 +155,7 @@ void Level_Order(NODE* root) //горизонтальный обход
 
 int CountSubtree(NODE* root, int* count)
 {
+	if (!root)return;
 	(*count)++;
 	if (root->Left)CountSubtree(root->Left, count);
 	if (root->Right)CountSubtree(root->Right, count);

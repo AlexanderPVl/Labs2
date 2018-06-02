@@ -88,35 +88,47 @@ NODE* MakeConcordance()
 {
 	FILE *f = fopen(TXT_FL_NM, "r");
 	NODE* root = NULL;
-	char c=0, word[WRD_LN];
-	while (fscanf(f, "%s", word))
+	int count, fl = 0;
+	char c = 0, word[WRD_LN];
+	while (count = fscanf(f, "%s", word))
 	{
+		fl += count;
 		if (word[strlen(word) - 1] == '.')word[strlen(word) - 1] = '\0';
 		AddNode(&root, word);
 		if (feof(f))break;
 	}
+	if (fl == -1){ printf("%d", fl); return NULL; }
 	return root;
 }
 
 void Pre_Order(NODE* root) // прямой обход
 {
-	printf("%s : %d\n", root->Str, root->Count);
-	if (root->Left)Pre_Order(root->Left);
-	if (root->Right)Pre_Order(root->Right);
+	if (root)
+	{
+		printf("%s : %d\n", root->Str, root->Count);
+		Pre_Order(root->Left);
+		Pre_Order(root->Right);
+	}
 }
 
 void In_Order(NODE* root) // симметричный обход
 {
-	if (root->Left)In_Order(root->Left);
-	printf("%s : %d\n", root->Str, root->Count);
-	if (root->Right)In_Order(root->Right);
+	if (root)
+	{
+		In_Order(root->Left);
+		printf("%s : %d\n", root->Str, root->Count);
+		In_Order(root->Right);
+	}
 }
 
 void Post_Order(NODE* root) // обратный обход
 {
-	if (root->Left)Post_Order(root->Left);
-	if (root->Right)Post_Order(root->Right);
-	printf("%s : %d\n", root->Str, root->Count);
+	if (root)
+	{
+		Post_Order(root->Left);
+		Post_Order(root->Right);
+		printf("%s : %d\n", root->Str, root->Count);
+	}
 }
 
 void Level_Order(NODE* root) //горизонтальный обход
@@ -163,6 +175,7 @@ int CountSubtree(NODE* root, int* count)
 
 int Task(NODE* root)
 {
+	if (!root){ printf("Tree is empty\n"); return 0; }
 	int Lcnt = 0, Rcnt = 0;
 	if (!root){ printf("Tree is empty\n"); return; }
 	if (!(root->Left || root->Right)){ printf("Subtrees are empty\n"); return; }
@@ -178,7 +191,7 @@ int Task(NODE* root)
 
 void DelTree(NODE* root)
 {
-	if (!root){
+	if (root){
 		DelTree(root->Left);
 		DelTree(root->Right);
 		free(root);

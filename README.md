@@ -1,1 +1,1 @@
-# Labs2
+# Laboratorki

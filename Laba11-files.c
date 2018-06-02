@@ -20,21 +20,20 @@ int CreateTxtFile()
 	char c = '0', i = 0;
 	f = fopen(TXT_FL_NM, "r");
 	if (f){ printf("File already exists\n"); fclose(f); return 1; }
-	printf("File does not exist\nFill \"%s\" file", TXT_FL_NM);
+	printf("File does not exist\nFill \"%s\" file\n", TXT_FL_NM);
 	f = fopen(TXT_FL_NM, "w");
 
 	printf("Enter string:\n");
-	while ((c = getchar()) != '.')
+	while ((c = getchar()) != '\n')
 	{
 		if (c == ' '){
-			word[i++] = ' ';
 			word[i] = '\0';
 			fprintf(f, "%s", word);
+			fputc(' ',f);
 			i = 0;
 		}
 		else
 			word[i++] = c;
-		word[i++] = ' ';
 		word[i] = '\0';
 	}
 	word[i] = '\0';
@@ -42,21 +41,6 @@ int CreateTxtFile()
 
 	fclose(f);
 	return;
-	/*printf("Enter text:\n");
-	char word[WRD_LN];
-	char c = '0', i = 0;
-	while ((c = getchar()) != '.')
-	{
-		if (c == ' '){
-			word[i] = '\0';
-			fprintf(f, "s", )
-			i = 0;
-		}
-		else
-			word[i++] = c;
-	}
-	word[i] = '\0';
-	AddNodeToTail(list, word);*/
 }
 
 void AddNode(NODE** root, char* str)
